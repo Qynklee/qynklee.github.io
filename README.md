@@ -1,1 +1,0 @@
-# qynklee.github.io
