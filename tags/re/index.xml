@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Qynklee in the wild</title>
-    <link>https://qynklee.github.io/</link>
-    <description>Recent content on Qynklee in the wild</description>
+    <title>RE on Qynklee in the wild</title>
+    <link>https://qynklee.github.io/tags/re/</link>
+    <description>Recent content in RE on Qynklee in the wild</description>
     <generator>Hugo -- 0.148.2</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 03 Aug 2025 16:14:06 +0700</lastBuildDate>
-    <atom:link href="https://qynklee.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://qynklee.github.io/tags/re/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ASCIS 2024 Forensics Chall: Thugs on the boat</title>
       <link>https://qynklee.github.io/posts/ascis-2024-forensics-chall-thugs-on-the-boat/</link>
@@ -28,30 +28,6 @@
 &lt;p&gt;Kiểm tra module này, bằng lệnh &lt;code&gt;lmDvmOneDrive&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img alt=&#34;image-20241019220239946&#34; loading=&#34;lazy&#34; src=&#34;../ascis-2024-forensics-chall-Thugs-on-the-boat_img/image-20241019220239946.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Thấy file thực thi được tải về từ Internet tại Downloads.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Who am I?</title>
-      <link>https://qynklee.github.io/about/</link>
-      <pubDate>Fri, 01 Aug 2025 00:00:00 +0000</pubDate>
-      <guid>https://qynklee.github.io/about/</guid>
-      <description>&lt;p&gt;Hi! I am &lt;strong&gt;Tu Anh Dao&lt;/strong&gt;, an official member of VN_MSEC, which is a CTF team in Vietnam. Now I work as a &amp;ldquo;&lt;em&gt;free&lt;/em&gt;&amp;rdquo; security engineer. I focus on malware analysis and digital forensics.&lt;/p&gt;
-&lt;h2 id=&#34;professional-experience&#34;&gt;Professional Experience&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Intern at VCS (I really love this time 😊)&lt;/li&gt;
-&lt;li&gt;Security engineer at an organization in Vietnam (3yrs)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;education&#34;&gt;Education&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Currently pursuing a Master’s degree in Information Systems at Le Quy Don Technical University, Vietnam.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;skills&#34;&gt;Skills&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Reverse engineering&lt;/li&gt;
-&lt;li&gt;Digital forensics&lt;/li&gt;
-&lt;li&gt;Basic web security testing&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;projects&#34;&gt;Projects&lt;/h2&gt;
-&lt;p&gt;Loading&amp;hellip;&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
