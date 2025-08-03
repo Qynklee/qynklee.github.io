@@ -156,6 +156,24 @@ Thấy file thực thi được tải về từ Internet tại Downloads.
   <footer class="entry-footer"><span title='2025-08-03 16:14:06 +0700 +07'>August 3, 2025</span>&nbsp;·&nbsp;8 min&nbsp;·&nbsp;1503 words&nbsp;·&nbsp;Qynklee</footer>
   <a class="entry-link" aria-label="post link to ASCIS 2024 Forensics Chall: Thugs on the boat" href="https://qynklee.github.io/posts/ascis-2024-forensics-chall-thugs-on-the-boat/"></a>
 </article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Analysis a RedlineStealer Sample
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Trong bài này mình sẽ phân tích một mẫu redline stealer được được thực thi thông qua file batch script có mã hash:
+4F1DD4357574C51EC7871212DBC7439C1013561041B5D6B3D5E5CE0DAC996AEB
+Đã quá lâu kể từ khi mình viết report phân tích vì….mình khá lười :smile:
+Ok, lẹt gô
+Stage 1 Đầu tiên với file batch script như sau:
+Ở đây các bạn có thể tấy echo off và line 6 cực kỳ dài. Line 6 bắt đầu bằng :: (tương đương lệnh REM) thì giống như nó đang truyền param là string tại line 6 vào 1 hàm nào đó đúng không. Đến đoạn này thì đầu tiên mình nghĩ đến dùng cmd deobfuscate tuy nhiên tool có vẻ không dùng được với đoạn này. Đến đây mình quyết định tham khảo công nghệ ChatGPT 3.5 (do nghèo) thì nhận được kết quả đoạn script đầu tiên là làm rối đoạn code check AV Defender. :&lt;
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2024-03-26 19:39:14 +0700 +07'>March 26, 2024</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;674 words&nbsp;·&nbsp;Qynklee</footer>
+  <a class="entry-link" aria-label="post link to Analysis a RedlineStealer Sample" href="https://qynklee.github.io/posts/analysis-a-redlinestealer-sample/"></a>
+</article>
     </main>
     
 <footer class="footer">

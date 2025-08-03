@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Analysis a RedlineStealer Sample | Qynklee in the wild</title>
+<meta name="keywords" content="RE">
+<meta name="description" content="Trong bài này mình sẽ phân tích một mẫu redline stealer được được thực thi thông qua file batch script có mã hash:
+4F1DD4357574C51EC7871212DBC7439C1013561041B5D6B3D5E5CE0DAC996AEB
+Đã quá lâu kể từ khi mình viết report phân tích vì&hellip;.mình khá lười :smile:
+Ok, lẹt gô
+Stage 1
+Đầu tiên với file batch script như sau:
+
+Ở đây các bạn có thể tấy echo off và line 6 cực kỳ dài. Line 6 bắt đầu bằng :: (tương đương lệnh REM) thì giống như nó đang truyền param là string tại line 6 vào 1 hàm nào đó đúng không.
+Đến đoạn này thì đầu tiên mình nghĩ đến dùng cmd deobfuscate tuy nhiên tool có vẻ không dùng được với đoạn này.
+Đến đây mình quyết định tham khảo công nghệ ChatGPT 3.5 (do nghèo) thì nhận được kết quả đoạn script đầu tiên là làm rối đoạn code check AV Defender. :&lt;">
+<meta name="author" content="Qynklee">
+<link rel="canonical" href="https://qynklee.github.io/posts/analysis-a-redlinestealer-sample/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://qynklee.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://qynklee.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://qynklee.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://qynklee.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://qynklee.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://qynklee.github.io/posts/analysis-a-redlinestealer-sample/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="https://qynklee.github.io/posts/analysis-a-redlinestealer-sample/">
+  <meta property="og:site_name" content="Qynklee in the wild">
+  <meta property="og:title" content="Analysis a RedlineStealer Sample">
+  <meta property="og:description" content="Trong bài này mình sẽ phân tích một mẫu redline stealer được được thực thi thông qua file batch script có mã hash:
+4F1DD4357574C51EC7871212DBC7439C1013561041B5D6B3D5E5CE0DAC996AEB
+Đã quá lâu kể từ khi mình viết report phân tích vì….mình khá lười :smile:
+Ok, lẹt gô
+Stage 1 Đầu tiên với file batch script như sau:
+Ở đây các bạn có thể tấy echo off và line 6 cực kỳ dài. Line 6 bắt đầu bằng :: (tương đương lệnh REM) thì giống như nó đang truyền param là string tại line 6 vào 1 hàm nào đó đúng không. Đến đoạn này thì đầu tiên mình nghĩ đến dùng cmd deobfuscate tuy nhiên tool có vẻ không dùng được với đoạn này. Đến đây mình quyết định tham khảo công nghệ ChatGPT 3.5 (do nghèo) thì nhận được kết quả đoạn script đầu tiên là làm rối đoạn code check AV Defender. :&lt;">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-03-26T19:39:14+07:00">
+    <meta property="article:modified_time" content="2024-03-26T19:39:14+07:00">
+    <meta property="article:tag" content="RE">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Analysis a RedlineStealer Sample">
+<meta name="twitter:description" content="Trong bài này mình sẽ phân tích một mẫu redline stealer được được thực thi thông qua file batch script có mã hash:
+4F1DD4357574C51EC7871212DBC7439C1013561041B5D6B3D5E5CE0DAC996AEB
+Đã quá lâu kể từ khi mình viết report phân tích vì&hellip;.mình khá lười :smile:
+Ok, lẹt gô
+Stage 1
+Đầu tiên với file batch script như sau:
+
+Ở đây các bạn có thể tấy echo off và line 6 cực kỳ dài. Line 6 bắt đầu bằng :: (tương đương lệnh REM) thì giống như nó đang truyền param là string tại line 6 vào 1 hàm nào đó đúng không.
+Đến đoạn này thì đầu tiên mình nghĩ đến dùng cmd deobfuscate tuy nhiên tool có vẻ không dùng được với đoạn này.
+Đến đây mình quyết định tham khảo công nghệ ChatGPT 3.5 (do nghèo) thì nhận được kết quả đoạn script đầu tiên là làm rối đoạn code check AV Defender. :&lt;">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://qynklee.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Analysis a RedlineStealer Sample",
+      "item": "https://qynklee.github.io/posts/analysis-a-redlinestealer-sample/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Analysis a RedlineStealer Sample",
+  "name": "Analysis a RedlineStealer Sample",
+  "description": "Trong bài này mình sẽ phân tích một mẫu redline stealer được được thực thi thông qua file batch script có mã hash:\n4F1DD4357574C51EC7871212DBC7439C1013561041B5D6B3D5E5CE0DAC996AEB\nĐã quá lâu kể từ khi mình viết report phân tích vì\u0026hellip;.mình khá lười :smile:\nOk, lẹt gô\nStage 1 Đầu tiên với file batch script như sau:\nỞ đây các bạn có thể tấy echo off và line 6 cực kỳ dài. Line 6 bắt đầu bằng :: (tương đương lệnh REM) thì giống như nó đang truyền param là string tại line 6 vào 1 hàm nào đó đúng không. Đến đoạn này thì đầu tiên mình nghĩ đến dùng cmd deobfuscate tuy nhiên tool có vẻ không dùng được với đoạn này. Đến đây mình quyết định tham khảo công nghệ ChatGPT 3.5 (do nghèo) thì nhận được kết quả đoạn script đầu tiên là làm rối đoạn code check AV Defender. :\u0026lt;\n",
+  "keywords": [
+    "RE"
+  ],
+  "articleBody": "Trong bài này mình sẽ phân tích một mẫu redline stealer được được thực thi thông qua file batch script có mã hash:\n4F1DD4357574C51EC7871212DBC7439C1013561041B5D6B3D5E5CE0DAC996AEB\nĐã quá lâu kể từ khi mình viết report phân tích vì….mình khá lười :smile:\nOk, lẹt gô\nStage 1 Đầu tiên với file batch script như sau:\nỞ đây các bạn có thể tấy echo off và line 6 cực kỳ dài. Line 6 bắt đầu bằng :: (tương đương lệnh REM) thì giống như nó đang truyền param là string tại line 6 vào 1 hàm nào đó đúng không. Đến đoạn này thì đầu tiên mình nghĩ đến dùng cmd deobfuscate tuy nhiên tool có vẻ không dùng được với đoạn này. Đến đây mình quyết định tham khảo công nghệ ChatGPT 3.5 (do nghèo) thì nhận được kết quả đoạn script đầu tiên là làm rối đoạn code check AV Defender. :\u003c\nRồi, qua any.run có thể thấy sample này sau khi thực thi sẽ gọi đến cmd với một command khác, rõ ràng hơn, do vậy mình đã bỏ qua đoạn script này mà check luôn đoạn sau.\nCommand đoạn sau như sau: Thực hiện một hồi deobfuscate bằng cơm thì mình được đoạn sau:\nCó thể thấy là đoạn code trên đọc lại file bat ban đầu sau đó thực hiện decrypt và decompress gzip dể tạo 2 object [byte[]] sau đó thực hiện Assembly load 2 object này và thực thi.\nOK vậy là xong stage1.\nVậy thì dump 2 object này ra rồi phân tích thôi, comment đoạn Invoke cuối, save object bằng đoạn:\n$type = $PE_1.GetType() Write-Host \"Variable type: $type\" $filePath = \"C:\\Users\\Inferno\\Desktop\\Malware\\PE_01.bin\" [System.IO.File]::WriteAllBytes($filePath, [byte[]]$PE_1) $filePath = \"C:\\Users\\Inferno\\Desktop\\Malware\\PE_02.bin\" [System.IO.File]::WriteAllBytes($filePath, [byte[]]$PE_2) Stage 2 PE_2 được thực thi trước PE_1 trong code của script nên mình sẽ coi PE_2 trước.\nPE_2 là binary .Net, code cơ bản như sau:\nĐây là đoạn code thực hiện patchi AMSI + ETW của NetLoader để thực hiện load C# binary lên mem và thực thi. PE_2 chỉ có vậy.\nTiếp tục với PE_1\nVới sự đơn giản của PE_2 hứa hẹn PE_1 sẽ khá to và nhiều trò.\nPE_2 có code chính như sau:\nĐoạn code của PE_@ khá ngắn gọn, đơn giản:\nCheck debug Thực hiện Assembyload từ Resource “P” Đi dump resource P, ta thu được 1 binary C# tiếp theo.\nStage3: Phân tích resource P\nResource P được dump ra đc compress Gzip, extract thu được binary .Net:\ndnspy tiếp, lần này code đã nhiều hơn\nTại entrypoint khởi tạo form1, chỉ thấy các đoạn code tạo giao diện??? Nhìn kỹ chút ngay đầu có hàm Program.WriteLine() đầy nghi hoặc. Check hàm WriteLine thì đó chính là hàm thực thi malicious code:\nĐầu tiên, thực hiện EnvironmentChecker.Check()\nKiểm tra hàm này:\nThực hiện kiểm tra region của máy nạn nhân, nếu region nằm trong list RegionsCountry thì chương trình sẽ tắt:\nprivate static readonly string[] RegionsCountry = new string[] { \"Armenia\", \"Azerbaijan\", \"Belarus\", \"Kazakhstan\", \"Kyrgyzstan\", \"Moldova\", \"Tajikistan\", \"Uzbekistan\", \"Ukraine\", \"Russia\" }; Ờ thì, list rõ ràng ghê á :v\nTiếp tục, mã độc thực hiện cài đặt RootCert và tìm tất cả shortcut của các trình duyệt và thêm “–proxy-server=\"217.65.2.14:3333\"” để cài đặt proxy cho tất cả các trình duyệt. Điều này sẽ khiến toàn bộ lưu lượng của browser qua Proxy server của hacker, và được decrypt luôn tại có rootcert :\u003c Tệ voãi ò.\nTiếp tục:\nTại hàm này sẽ thực hiện gọi các element của stealer, đồng thời giải mã IP, Port của CC server.\nThuật toán giải mã khá đơn giản:\nChỉ cần base64 \u003e XOR key \u003e base64 lại.\nIP = “GSY0Gz4JP1g8HhEILD1HGj8tHw4bJigZPQRPVA==”;\nKey = “Transcript”;\nDùng CyberChef, thu được IP:Port CC như sau:\nCC: 15.235.131.20:39206\nCheck tiếp hàm tạo kết nối đến CC, ta thu được thông tin Authen và rootCert được install vào máy nạn nhân.\nstring text = \"0c859af6b9c95799f32f6a1659b784d6\"; MessageHeader messageHeader = MessageHeader.CreateHeader(\"Authorization\", \"ns1\", text); Còn lại là các hàm thực hiện stealer :3 Mình sẽ không nói thêm ở đây. vì mình lười dồi :D\n",
+  "wordCount" : "674",
+  "inLanguage": "en",
+  "datePublished": "2024-03-26T19:39:14+07:00",
+  "dateModified": "2024-03-26T19:39:14+07:00",
+  "author":{
+    "@type": "Person",
+    "name": "Qynklee"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://qynklee.github.io/posts/analysis-a-redlinestealer-sample/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Qynklee in the wild",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://qynklee.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://qynklee.github.io/" accesskey="h" title="Qynklee in the wild (Alt + H)">Qynklee in the wild</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://qynklee.github.io/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://qynklee.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://qynklee.github.io/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://qynklee.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://qynklee.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://qynklee.github.io/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Analysis a RedlineStealer Sample
+    </h1>
+    <div class="post-meta"><span title='2024-03-26 19:39:14 +0700 +07'>March 26, 2024</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;674 words&nbsp;·&nbsp;Qynklee
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#stage-1" aria-label="Stage 1">Stage 1</a></li>
+                <li>
+                    <a href="#stage-2" aria-label="Stage 2">Stage 2</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Trong bài này mình sẽ phân tích một mẫu redline stealer được được thực thi thông qua file batch script có mã hash:</p>
+<p>4F1DD4357574C51EC7871212DBC7439C1013561041B5D6B3D5E5CE0DAC996AEB</p>
+<p>Đã quá lâu kể từ khi mình viết report phân tích vì&hellip;.mình khá lười :smile:</p>
+<p>Ok, lẹt gô</p>
+<h3 id="stage-1">Stage 1<a hidden class="anchor" aria-hidden="true" href="#stage-1">#</a></h3>
+<p>Đầu tiên với file batch script như sau:</p>
+<p><img alt="image-20240402080214477" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402080214477.png"></p>
+<p>Ở đây các bạn có thể tấy echo off và line 6 cực kỳ dài. Line 6 bắt đầu bằng :: (tương đương lệnh REM) thì giống như nó đang truyền param là string tại line 6 vào 1 hàm nào đó đúng không.
+Đến đoạn này thì đầu tiên mình nghĩ đến dùng cmd deobfuscate tuy nhiên tool có vẻ không dùng được với đoạn này.
+Đến đây mình quyết định tham khảo công nghệ ChatGPT 3.5 (do nghèo) thì nhận được kết quả đoạn script đầu tiên là làm rối đoạn code check AV Defender. :&lt;</p>
+<p>Rồi, qua any.run có thể thấy sample này sau khi thực thi sẽ gọi đến cmd với một command khác, rõ ràng hơn, do vậy mình đã bỏ qua đoạn script này mà check luôn đoạn sau.</p>
+<p>Command đoạn sau như sau:
+<img alt="image-20240402080717817" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402080717817.png"></p>
+<p>Thực hiện một hồi deobfuscate bằng cơm thì mình được đoạn sau:</p>
+<p><img alt="image-20240402081000325" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402081000325.png"></p>
+<p>Có thể thấy là đoạn code trên đọc lại file bat ban đầu sau đó thực hiện decrypt và decompress gzip dể tạo 2 object [byte[]] sau đó thực hiện Assembly load 2 object này và thực thi.</p>
+<p>OK vậy là xong stage1.</p>
+<p>Vậy thì dump 2 object này ra rồi phân tích thôi, comment đoạn Invoke cuối, save object bằng đoạn:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$type = $PE_1.GetType()
+</span></span><span style="display:flex;"><span>Write-Host <span style="color:#e6db74">&#34;Variable type: </span>$type<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>$filePath = <span style="color:#e6db74">&#34;C:\Users\Inferno\Desktop\Malware\PE_01.bin&#34;</span>
+</span></span><span style="display:flex;"><span>[<span style="color:#66d9ef">System.IO.File</span>]::WriteAllBytes($filePath, [<span style="color:#66d9ef">byte[]</span>]$PE_1)
+</span></span><span style="display:flex;"><span>$filePath = <span style="color:#e6db74">&#34;C:\Users\Inferno\Desktop\Malware\PE_02.bin&#34;</span>
+</span></span><span style="display:flex;"><span>[<span style="color:#66d9ef">System.IO.File</span>]::WriteAllBytes($filePath, [<span style="color:#66d9ef">byte[]</span>]$PE_2)
+</span></span></code></pre></div><h3 id="stage-2">Stage 2<a hidden class="anchor" aria-hidden="true" href="#stage-2">#</a></h3>
+<p>PE_2 được thực thi trước PE_1 trong code của script nên mình sẽ coi PE_2 trước.</p>
+<p>PE_2 là binary .Net, code cơ bản như sau:</p>
+<p><img alt="image-20240402084535739" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402084535739.png"></p>
+<p>Đây là đoạn code thực hiện  patchi AMSI + ETW của <a href="https://github.com/Flangvik/NetLoader">NetLoader</a> để thực hiện load C# binary lên mem và thực thi. PE_2 chỉ có vậy.</p>
+<p>Tiếp tục với PE_1</p>
+<p>Với sự đơn giản của PE_2 hứa hẹn PE_1 sẽ khá to và nhiều trò.</p>
+<p>PE_2 có code chính như sau:</p>
+<p><img alt="image-20240402084836148" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402084836148.png"></p>
+<p>Đoạn code của PE_@ khá ngắn gọn, đơn giản:</p>
+<ul>
+<li>Check debug</li>
+<li>Thực hiện Assembyload từ Resource &ldquo;P&rdquo;</li>
+</ul>
+<p>Đi dump resource P, ta thu được 1 binary C# tiếp theo.</p>
+<p><strong>Stage3: Phân tích resource P</strong></p>
+<p>Resource P được dump ra đc compress Gzip, extract thu được binary .Net:</p>
+<p><img alt="image-20240402085751988" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402085751988.png"></p>
+<p>dnspy tiếp, lần này code đã nhiều hơn</p>
+<p>Tại entrypoint khởi tạo form1, chỉ thấy các đoạn code tạo giao diện??? Nhìn kỹ chút ngay đầu có hàm Program.WriteLine() đầy nghi hoặc.
+<img alt="image-20240402085939800" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402085939800.png"></p>
+<p>Check hàm WriteLine thì đó chính là hàm thực thi malicious code:</p>
+<p><img alt="image-20240402090027775" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402090027775.png"></p>
+<p>Đầu tiên, thực hiện EnvironmentChecker.Check()</p>
+<p>Kiểm tra hàm này:</p>
+<p><img alt="image-20240402091029963" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402091029963.png"></p>
+<p>Thực hiện kiểm tra region của máy nạn nhân, nếu region nằm trong list RegionsCountry thì chương trình sẽ tắt:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C#" data-lang="C#"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">readonly</span> <span style="color:#66d9ef">string</span>[] RegionsCountry = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">string</span>[] { <span style="color:#e6db74">&#34;Armenia&#34;</span>, <span style="color:#e6db74">&#34;Azerbaijan&#34;</span>, <span style="color:#e6db74">&#34;Belarus&#34;</span>, <span style="color:#e6db74">&#34;Kazakhstan&#34;</span>, <span style="color:#e6db74">&#34;Kyrgyzstan&#34;</span>, <span style="color:#e6db74">&#34;Moldova&#34;</span>, <span style="color:#e6db74">&#34;Tajikistan&#34;</span>, <span style="color:#e6db74">&#34;Uzbekistan&#34;</span>, <span style="color:#e6db74">&#34;Ukraine&#34;</span>, <span style="color:#e6db74">&#34;Russia&#34;</span> };
+</span></span></code></pre></div><p>Ờ thì, list rõ ràng ghê á :v</p>
+<p>Tiếp tục, mã độc thực hiện cài đặt RootCert và tìm tất cả shortcut của các trình duyệt và thêm &ldquo;&ndash;proxy-server=&quot;217.65.2.14:3333&quot;&rdquo; để cài đặt proxy cho tất cả các trình duyệt. Điều này sẽ khiến toàn bộ lưu lượng của browser qua Proxy server của hacker, và được decrypt luôn tại có rootcert :&lt; Tệ voãi ò.</p>
+<p>Tiếp tục:</p>
+<p>Tại hàm này sẽ thực hiện gọi các element của stealer, đồng thời giải mã IP, Port của CC server.</p>
+<p>Thuật toán giải mã khá đơn giản:</p>
+<p><img alt="image-20240402090138651" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402090138651.png"></p>
+<p>Chỉ cần base64 &gt; XOR key &gt; base64 lại.</p>
+<p>IP = &ldquo;GSY0Gz4JP1g8HhEILD1HGj8tHw4bJigZPQRPVA==&rdquo;;</p>
+<p>Key = &ldquo;Transcript&rdquo;;</p>
+<p>Dùng CyberChef, thu được IP:Port CC như sau:</p>
+<p><img alt="image-20240402090256957" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402090256957.png"></p>
+<p>CC: 15.235.131.20:39206</p>
+<p>Check tiếp hàm tạo kết nối đến CC, ta thu được thông tin Authen và rootCert được install vào máy nạn nhân.</p>
+<p><img alt="image-20240402090418315" loading="lazy" src="../Analysis-a-RedlineStealer-sample_img/image-20240402090418315.png"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C#" data-lang="C#"><span style="display:flex;"><span><span style="color:#66d9ef">string</span> text = <span style="color:#e6db74">&#34;0c859af6b9c95799f32f6a1659b784d6&#34;</span>;
+</span></span><span style="display:flex;"><span>MessageHeader messageHeader = MessageHeader.CreateHeader(<span style="color:#e6db74">&#34;Authorization&#34;</span>, <span style="color:#e6db74">&#34;ns1&#34;</span>, text);
+</span></span></code></pre></div><p>Còn lại là các hàm thực hiện stealer :3 Mình sẽ không nói thêm ở đây. vì mình lười dồi :D</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://qynklee.github.io/tags/re/">RE</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://qynklee.github.io/posts/ascis-2024-forensics-chall-thugs-on-the-boat/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>ASCIS 2024 Forensics Chall: Thugs on the boat</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://qynklee.github.io/">Qynklee in the wild</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
