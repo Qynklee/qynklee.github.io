@@ -45,5 +45,16 @@
 Đến đoạn này thì đầu tiên mình nghĩ đến dùng cmd deobfuscate tuy nhiên tool có vẻ không dùng được với đoạn này.
 Đến đây mình quyết định tham khảo công nghệ ChatGPT 3.5 (do nghèo) thì nhận được kết quả đoạn script đầu tiên là làm rối đoạn code check AV Defender. :&amp;lt;&lt;/p&gt;</description>
     </item>
+    <item>
+      <title>Analysis a Emotet Malware Sample</title>
+      <link>https://qynklee.github.io/posts/analysis-a-emotet-malware-sample/</link>
+      <pubDate>Thu, 20 Jan 2022 20:17:35 +0700</pubDate>
+      <guid>https://qynklee.github.io/posts/analysis-a-emotet-malware-sample/</guid>
+      <description>&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Giới thiệu&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Mã độc Emotet là một trong những loại mã độc phổ biến nhất hiện nay, với nhiều biến thể, phiên bản cũ mới khác nhau nhưng nhìn chung mã độc này vẫn sử dụng cách thức lây nhiễm bằng việc spam email bằng những tài liệu được đính kèm macro mã độc.&lt;/p&gt;
+&lt;p&gt;Trong báo cáo này, tôi thực hiện phân tích mã độc Emotet E4 xuất hiện vào những ngày đầu tháng 12/2021. Biến thể này có sự thay đổi nhiều hơn hẳn so với mã độc Emotet lần đầu xuất hiện năm 2014 và có sự tương đồng ở một số điểm so với các biến thể E2, E3 đã xuất hiện trong năm 2021.&lt;/p&gt;</description>
+    </item>
   </channel>
 </rss>
