@@ -6,8 +6,22 @@
     <description>Recent content in Posts on Qynklee in the wild</description>
     <generator>Hugo -- 0.148.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 03 Aug 2025 16:14:06 +0700</lastBuildDate>
+    <lastBuildDate>Fri, 19 Sep 2025 08:16:55 +0700</lastBuildDate>
     <atom:link href="https://qynklee.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Edit EDID for Dummy HDMI to add support 16:10 aspect ratio</title>
+      <link>https://qynklee.github.io/posts/edit-edid-for-dummy-hdmi-to-add-support-1610-aspect-ratio/</link>
+      <pubDate>Fri, 19 Sep 2025 08:16:55 +0700</pubDate>
+      <guid>https://qynklee.github.io/posts/edit-edid-for-dummy-hdmi-to-add-support-1610-aspect-ratio/</guid>
+      <description>&lt;p&gt;My dummy HDMI only support 1920x1080 60Hz, but all my real displays is 16:10. It leads to a problem that every time I switch devices, the Windows interface is forced to scale to the new resolution with a different ratio. After that, some apps will be broken GUI. So I need to patch EDID to change my HDMI dummy resolution.&lt;/p&gt;
+&lt;p&gt;First, all we need is:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Computer with AMD or NVIDIA GPU (HDMI dummy pluged in to GPU). If yours PC is a laptop, make sure that GPU is out to HDMI ports.&lt;/li&gt;
+&lt;li&gt;EDID Writer tool: &lt;a href=&#34;https://www.monitortests.com/forum/Thread-EDID-DisplayID-Writer&#34;&gt;EDWriter&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;EDID databases: EDID repo from &lt;strong&gt;BSD Hardware Project&lt;/strong&gt;: &lt;a href=&#34;https://github.com/bsdhw/EDID&#34;&gt;https://github.com/bsdhw/EDID&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let&amp;rsquo;s go!&lt;/p&gt;</description>
+    </item>
     <item>
       <title>ASCIS 2024 Forensics Chall: Thugs on the boat</title>
       <link>https://qynklee.github.io/posts/ascis-2024-forensics-chall-thugs-on-the-boat/</link>
